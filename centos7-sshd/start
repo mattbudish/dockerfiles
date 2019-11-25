@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+set -e
+
+USER=user
+PASSWORD=B4D_P455w0rd
+PORT=22
+
+while getopts ":u:w:p:" option;
+do
+  case $option in
+  u)
+    USER=$OPTARG
+    ;;
+  w)
+    PASSWORD=$OPTARG
+    ;;
+  p)
+    PORT=$OPTARG
+    ;;
+  :)
+    echo "Option -$OPTARG need an argument"
+    ;;
+  *)
+    echo "Invalid optionn $OPTARG"
+    ;;
+  esac
+done
+
+useradd $USER
+echo -e "$PASSWORD\n$PASSWORD" | (passwd --stdin $USER)
+usermod -aG wheel $USER 
+
+sed -i "s/#Port 22/Port ${PORT}/g" /etc/ssh/sshd_config 
+
+exec /usr/sbin/sshd -D
