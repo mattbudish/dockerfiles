@@ -18,7 +18,7 @@ do
     PORT=$OPTARG
     ;;
   :)
-    echo "Option -$OPTARG need an argument"
+    echo "Option -$OPTARG needs an argument"
     ;;
   *)
     echo "Invalid optionn $OPTARG"
