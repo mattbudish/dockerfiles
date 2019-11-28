@@ -1,24 +1,20 @@
 #!/usr/bin/env bash
 set -e
 
-USER=user
-PASSWORD=B4D_P455w0rd
-PORT=22
-
 while getopts ":u:w:p:" option;
 do
   case $option in
   u)
-    USER=$OPTARG
+    SSH_USER=$OPTARG
     ;;
   w)
-    PASSWORD=$OPTARG
+    SSH_PASSWORD=$OPTARG
     ;;
   p)
-    PORT=$OPTARG
+    SSH_PORT=$OPTARG
     ;;
   :)
-    echo "Option -$OPTARG need an argument"
+    echo "Option -$OPTARG needs an argument"
     ;;
   *)
     echo "Invalid optionn $OPTARG"
