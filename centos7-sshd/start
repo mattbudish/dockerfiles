@@ -22,10 +22,21 @@ do
   esac
 done
 
-useradd $USER
-echo -e "$PASSWORD\n$PASSWORD" | (passwd --stdin $USER)
-usermod -aG wheel $USER 
+if [ $SSH_USER ]; then
+  useradd $SSH_USER
+  usermod -aG wheel $SSH_USER
 
-sed -i "s/#Port 22/Port ${PORT}/g" /etc/ssh/sshd_config 
+  if [ $SSH_PASSWORD ]; then
+    echo -e "$SSH_PASSWORD\n$SSH_PASSWORD" | (passwd --stdin $SSH_USER)
+  fi
+else
+  if [ $SSH_PASSWORD ]; then
+    echo "ERROR: cannot set password without user"
+  fi
+fi
+
+if [ $SSH_PORT ]; then
+  sed -i "s/#Port 22/Port ${SSH_PORT}/g" /etc/ssh/sshd_config 
+fi
 
 exec /usr/sbin/sshd -D
